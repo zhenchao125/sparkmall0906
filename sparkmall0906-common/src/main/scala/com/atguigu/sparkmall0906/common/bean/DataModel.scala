@@ -68,8 +68,3 @@ case class UserVisitAction(date: String,
                            pay_category_ids: String,
                            pay_product_ids: String,
                            city_id: Long)
-
-
-
-
-case class A()
