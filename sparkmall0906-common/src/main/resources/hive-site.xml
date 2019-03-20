@@ -3,7 +3,7 @@
 <configuration>
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:mysql://hadoop201:3306/sparkmall0906/metastore?createDatabaseIfNotExist=true</value>
+        <value>jdbc:mysql://hadoop201:3306/metastore?createDatabaseIfNotExist=true</value>
         <description>JDBC connect string for a JDBC metastore</description>
     </property>
 

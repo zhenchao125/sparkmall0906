@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>sparkmall0906-common</module>
+        <module>sparkmall0906-mock</module>
     </modules>
     <!--声明用到的框架的版本号,统一管理   此处只声明了一部分版本-->
     <properties>
