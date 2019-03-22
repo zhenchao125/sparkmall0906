@@ -63,6 +63,7 @@ object CategoryTop10App {
         val top10Array: List[Array[Any]] = top10.map(info => Array(info.taskId, info.categoryId, info.clickCount, info.orderCount, info.payCount))
         // 插入
         JDBCUtil.executeBatchUpdate("insert into category_top10 values(?, ?, ?, ?, ?)", top10Array)
+        top10
     }
     
 }
