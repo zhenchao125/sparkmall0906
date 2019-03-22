@@ -3,6 +3,7 @@ package com.atguigu.sparkmall0906.offline.app
 import java.text.DecimalFormat
 
 import com.atguigu.sparkmall0906.common.bean.UserVisitAction
+import com.atguigu.sparkmall0906.common.util.JDBCUtil
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
@@ -15,7 +16,7 @@ object PageConversionApp {
         val pages: Array[String] = targetPages.split(",")
         val prePages: Array[String] = pages.slice(0, pages.length - 1) // 1 2 3 4 5 5 6  7
         val postPages: Array[String] = pages.slice(1, pages.length)
-        val targetJumpPages = prePages.zip(postPages).map {
+        val targetJumpPages = prePages.zip(postPages).map { // 目标跳转流
             case (p1, p2) => p1 + "->" + p2
         }
         
@@ -46,7 +47,7 @@ object PageConversionApp {
         // 3.3 计算每个跳转流的次数   ("1->2", 100) , ("2->3", 200)    // 分母: targetPagesCountMap
         val targetJumpFlowCount: collection.Map[String, Long] = targetJumpFlow.map((_, 1)).countByKey
         // 4. 计算跳转率     ("1->2", 10.22%), ("2->3", 20.46%)
-        val  formatter = new DecimalFormat("0.00%")
+        val formatter = new DecimalFormat("0.00%")
         val targetJumpRate: collection.Map[String, Any] = targetJumpFlowCount.map {
             case (flow, count) => {
                 val key = flow.split("->")(0).toLong
@@ -54,10 +55,12 @@ object PageConversionApp {
                 (flow, formatter.format(jumpRate)) //
             }
         }
-        println(targetJumpRate)
         // 5 写入到mysql数据库
-        
-        
+        val jumpRateArray: Iterable[Array[Any]] = targetJumpRate.map {
+            case (flow, jumpRate) => Array(taskId, flow, jumpRate)
+        }
+        JDBCUtil.executeUpdate("truncate table page_conversion_rate", null)
+        JDBCUtil.executeBatchUpdate("insert into  page_conversion_rate values(?, ?, ?)", jumpRateArray)
     }
 }
 

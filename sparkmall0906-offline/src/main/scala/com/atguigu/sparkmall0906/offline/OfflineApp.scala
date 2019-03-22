@@ -5,7 +5,7 @@ import java.util.UUID
 import com.alibaba.fastjson.JSON
 import com.atguigu.sparkmall0906.common.bean.UserVisitAction
 import com.atguigu.sparkmall0906.common.util.ConfigurationUtil
-import com.atguigu.sparkmall0906.offline.app.{CategorySessionApp, CategoryTop10App, PageConversionApp}
+import com.atguigu.sparkmall0906.offline.app.{AreaClickApp, CategorySessionApp, CategoryTop10App, PageConversionApp}
 import com.atguigu.sparkmall0906.offline.bean.{CategoryCountInfo, Condition}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
@@ -32,7 +32,9 @@ object OfflineApp {
 //        CategorySessionApp.statCategoryTop10Session(spark, categoryTop10, userVisitActionRDD, taskId)
         
         // 需求3: 统计 单页跳转率
-        PageConversionApp.calc(spark, userVisitActionRDD, readCondition().targetPageFlow, taskId)
+//        PageConversionApp.calc(spark, userVisitActionRDD, readCondition().targetPageFlow, taskId)
+        // 需求4: 统计地区商品的top3
+        AreaClickApp.statAreaClickTop3Product(spark, taskId)
     }
     
     /**
