@@ -5,7 +5,7 @@ import java.util.UUID
 import com.alibaba.fastjson.JSON
 import com.atguigu.sparkmall0906.common.bean.UserVisitAction
 import com.atguigu.sparkmall0906.common.util.ConfigurationUtil
-import com.atguigu.sparkmall0906.offline.app.{CategorySessionApp, CategoryTop10App}
+import com.atguigu.sparkmall0906.offline.app.{CategorySessionApp, CategoryTop10App, PageConversionApp}
 import com.atguigu.sparkmall0906.offline.bean.{CategoryCountInfo, Condition}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
@@ -27,9 +27,12 @@ object OfflineApp {
         userVisitActionRDD.cache //做缓存
 //        userVisitActionRDD.persist()
         // 需求1: 统计品类的top10
-        val categoryTop10: List[CategoryCountInfo] = CategoryTop10App.statCategoryTop10(spark, userVisitActionRDD, taskId)
+//        val categoryTop10: List[CategoryCountInfo] = CategoryTop10App.statCategoryTop10(spark, userVisitActionRDD, taskId)
         // 需求2: 统计top10品类的 top10 活跃 session
-        CategorySessionApp.statCategoryTop10Session(spark, categoryTop10, userVisitActionRDD, taskId)
+//        CategorySessionApp.statCategoryTop10Session(spark, categoryTop10, userVisitActionRDD, taskId)
+        
+        // 需求3: 统计 单页跳转率
+        PageConversionApp.calc(spark, userVisitActionRDD, readCondition().targetPageFlow, taskId)
     }
     
     /**
