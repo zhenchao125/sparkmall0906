@@ -1,5 +1,7 @@
 package com.atguigu.sparkmall0906.offline
 
+import java.util.UUID
+
 import com.alibaba.fastjson.JSON
 import com.atguigu.sparkmall0906.common.bean.UserVisitAction
 import com.atguigu.sparkmall0906.common.util.ConfigurationUtil
@@ -19,12 +21,11 @@ object OfflineApp {
             .enableHiveSupport()
             .config("spark.sql.warehouse.dir", "hdfs://hadoop201:9000/user/hive/warehouse")
             .getOrCreate()
+        val taskId: String = UUID.randomUUID().toString
         // 根据条件过滤出来需要的 UserVisitAction
         val userVisitActionRDD: RDD[UserVisitAction] = readUserVisitActionRDD(spark, readCondition())
-        
         // 需求1: 统计品类的top10
-        CategoryTop10App.statCategoryTop10(spark, userVisitActionRDD)
-        
+        CategoryTop10App.statCategoryTop10(spark, userVisitActionRDD, taskId)
     }
     /**
       * 根据传入的条件, 来读取用户行为的数据
@@ -32,7 +33,7 @@ object OfflineApp {
       * @param spark
       * @param condition
       */
-    def readUserVisitActionRDD(spark: SparkSession, condition: Condition): RDD[UserVisitAction] = {
+    def readUserVisitActionRDD(spark: SparkSession, condition: Condition)= {
         // 1. 先有sql语句
         var sql =
             s"""
