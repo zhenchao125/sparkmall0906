@@ -1,6 +1,7 @@
 package com.atguigu.sparkmall0906.offline.app
 
 import com.atguigu.sparkmall0906.common.bean.UserVisitAction
+import com.atguigu.sparkmall0906.common.util.JDBCUtil
 import com.atguigu.sparkmall0906.offline.bean.{CategoryCountInfo, CategorySession}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
@@ -29,8 +30,11 @@ object CategorySessionApp {
                 }
             }
         }
-        // 5. 吸入到
-        categorySessionRDD.collect().foreach(println)
+        // 5. 写入到mysql  数据量已经很小, 可以数据拉到 Driver, 然后再写入
+    
+        val csArray = categorySessionRDD.map(cs => Array(cs.taskId, cs.categoryId, cs.sessionId, cs.clickCount)).collect
+        JDBCUtil.executeUpdate("truncate table category_top10_session_count", null)
+        JDBCUtil.executeBatchUpdate("insert into category_top10_session_count values(?, ?, ?, ?)", csArray)
     }
 }
 
