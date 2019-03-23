@@ -1,6 +1,7 @@
 package com.atguigu.sparkmall0906.realtime
 
 import com.atguigu.sparkmall0906.common.util.MyKafkaUtil
+import com.atguigu.sparkmall0906.realtime.app.{BlackListApp, DayAreaCityAdsApp}
 import com.atguigu.sparkmall0906.realtime.bean.AdsInfo
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.{SparkConf, SparkContext}
@@ -9,6 +10,7 @@ import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 
 object RealtimeApp {
     def main(args: Array[String]): Unit = {
+        
         // 从kafka中读出我们需要数据
         // 1. 创建 SparkConf 对象
         val conf: SparkConf = new SparkConf()
@@ -33,13 +35,7 @@ object RealtimeApp {
         BlackListApp.checkUserToBlackList(filteredDStream)
         
         // 7. 需求6:
-        filteredDStream.foreachRDD{
-            rdd => {
-                rdd.foreach{
-                    info => println(info.userId)
-                }
-            }
-        }
+        DayAreaCityAdsApp.statAreaCityAdsPerDay(filteredDStream, sc)
         ssc.start()
         ssc.awaitTermination()
     }

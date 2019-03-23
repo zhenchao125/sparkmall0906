@@ -1,12 +1,11 @@
-package com.atguigu.sparkmall0906.realtime
+package com.atguigu.sparkmall0906.realtime.app
 
 import java.util
 
 import com.atguigu.sparkmall0906.common.util.RedisUtil
 import com.atguigu.sparkmall0906.realtime.bean.AdsInfo
-import org.apache.spark
+import org.apache.spark.SparkContext
 import org.apache.spark.broadcast.Broadcast
-import org.apache.spark.{SparkContext, rdd}
 import org.apache.spark.streaming.dstream.DStream
 import redis.clients.jedis.Jedis
 
@@ -38,6 +37,10 @@ object BlackListApp {
         }
     }
     
+    /**
+      * 检测用户是否添加到黑名单中
+      * @param adsInfoDStream
+      */
     def checkUserToBlackList(adsInfoDStream: DStream[AdsInfo]) = {
         adsInfoDStream.foreachRDD(rdd => {
             rdd.foreachPartition(infoIt => {
