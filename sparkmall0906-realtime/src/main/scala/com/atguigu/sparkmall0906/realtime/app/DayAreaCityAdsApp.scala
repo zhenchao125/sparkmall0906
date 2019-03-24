@@ -28,6 +28,7 @@ object DayAreaCityAdsApp {
             }
             client.close()
         })
+        resultDSteam
     }
 }
 
