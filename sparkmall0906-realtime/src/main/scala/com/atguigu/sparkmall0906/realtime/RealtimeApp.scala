@@ -1,7 +1,7 @@
 package com.atguigu.sparkmall0906.realtime
 
 import com.atguigu.sparkmall0906.common.util.MyKafkaUtil
-import com.atguigu.sparkmall0906.realtime.app.{AreaAdsTop3, BlackListApp, DayAreaCityAdsApp}
+import com.atguigu.sparkmall0906.realtime.app.{AreaAdsTop3, BlackListApp, DayAreaCityAdsApp, LastHourAdsApp}
 import com.atguigu.sparkmall0906.realtime.bean.AdsInfo
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.{SparkConf, SparkContext}
@@ -39,6 +39,9 @@ object RealtimeApp {
         
         // 8. 需求 7
         AreaAdsTop3.statAreaAdsTop3(dayAreaAdsCityCount)
+        
+        // 9. 需求8
+        LastHourAdsApp.statLastHourAds(filteredDStream)
         ssc.start()
         ssc.awaitTermination()
     }

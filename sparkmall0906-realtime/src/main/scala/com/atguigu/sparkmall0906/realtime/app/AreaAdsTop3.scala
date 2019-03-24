@@ -47,7 +47,6 @@ object AreaAdsTop3 {
                     }
                 }
                 (day, temp3)
-            
             }
         }
         
@@ -69,7 +68,7 @@ object AreaAdsTop3 {
     }
 }
 /*
-(2019-03-11:华南:深圳:1, 2)
+ (2019-03-11:华南:深圳:1, 2)
  RDD[2019-03-11:华南:深圳:1, 2]  把城市去掉  map
  => RDD[day:area:adsId, count1] reduceByKey
  => RDD[day:area:adsId, count2] map
