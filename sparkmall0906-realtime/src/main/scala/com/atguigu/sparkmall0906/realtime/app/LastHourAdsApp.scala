@@ -14,7 +14,7 @@ object LastHourAdsApp {
     def statLastHourAds(filteredDStream: DStream[AdsInfo]) = {
         val dateFormatter = new SimpleDateFormat("HH:mm")
         // 1. 利用窗口来对DStream进行开窗
-        val DStreamWithWindow: DStream[AdsInfo] = filteredDStream.window(Minutes(60), Seconds(4))
+        val DStreamWithWindow: DStream[AdsInfo] = filteredDStream.window(Minutes(2), Seconds(4))
         val hourMinutesCount = DStreamWithWindow.map(adsInfo => {
             ((adsInfo.adsId, dateFormatter.format(new Date(adsInfo.ts))), 1)
         }).reduceByKey(_ + _).map {
