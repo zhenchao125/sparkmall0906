@@ -42,6 +42,10 @@ class MapAccumulator extends AccumulatorV2[(String, String), mutable.Map[((Strin
                 map.put(k, map.getOrElse(k, 0L) + count)
             }
         }
+        /*other.value.foreach(kv => {
+            map.put(kv._1, map.getOrElse(kv._1, 0L) + kv._2)
+        })*/
+        
     }
     
     // 最终的返回值

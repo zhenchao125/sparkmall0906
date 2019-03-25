@@ -24,6 +24,5 @@ object ConfigurationUtil {
         val conf = ConfigurationUtil("config.properties")
         println(conf.getString("jdbc.user"))
         println(conf.getInt("redis.port"))
-        
     }
 }
